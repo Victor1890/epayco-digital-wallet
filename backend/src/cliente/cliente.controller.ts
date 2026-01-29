@@ -1,9 +1,10 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, Get, Query } from '@nestjs/common';
 import { ClienteService } from './cliente.service';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { RecargarBilleteraDto } from './dto/recargar-billetera.dto';
 import { SolicitarPagoDto } from './dto/solicitar-pago.dto';
 import { ConfirmarPagoDto } from './dto/confirmar-pago.dto';
+import { ConsultarSaldoDto } from './dto/consultar-saldo.dto';
 
 @Controller('registroCliente')
 export class ClienteController {
@@ -34,5 +35,12 @@ export class ClienteController {
     async confirmarPago(@Body() confirmarPagoDto: ConfirmarPagoDto) {
         const { sessionId, token } = confirmarPagoDto;
         return this.clienteService.confirmarPago(sessionId, token);
+    }
+
+    @Get('consultarSaldo')
+    @HttpCode(HttpStatus.OK)
+    async consultarSaldo(@Query() consultarSaldoDto: ConsultarSaldoDto) {
+        const { documento, celular } = consultarSaldoDto;
+        return this.clienteService.consultarSaldo(documento, celular);
     }
 }

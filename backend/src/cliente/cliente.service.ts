@@ -97,4 +97,14 @@ export class ClienteService {
 
         return 'Payment confirmed successfully.';
     }
+
+    async consultarSaldo(documento: string, celular: string): Promise<{ saldo: number }> {
+        const cliente = await this.clienteRepository.findOne({ where: { documento, celular } });
+
+        if (!cliente) {
+            throw new BadRequestException('Cliente not found or data mismatch.');
+        }
+
+        return { saldo: cliente.saldo };
+    }
 }
