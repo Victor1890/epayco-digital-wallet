@@ -69,6 +69,32 @@ export class ClienteService {
         return {
             message: 'OTP sent to registered email.',
             sessionId,
+            token: otp, // In real scenario, do not return the token
         };
+    }
+
+    async confirmarPago(sessionId: string, token: string): Promise<string> {
+        const cliente = await this.clienteRepository.findOne({ where: { otp: token } });
+
+        const valor = 0; // Placeholder since 'valor' is not passed in parameters
+
+        if (!cliente) {
+            throw new BadRequestException('Invalid token or session ID.');
+        }
+
+        if (!cliente.otpExpiration || cliente.otpExpiration < new Date()) {
+            throw new BadRequestException('Token has expired.');
+        }
+
+        if (cliente.saldo < valor) {
+            throw new BadRequestException('Insufficient balance.');
+        }
+
+        cliente.saldo -= valor;
+        cliente.otp = null;
+        cliente.otpExpiration = null;
+        await this.clienteRepository.save(cliente);
+
+        return 'Payment confirmed successfully.';
     }
 }

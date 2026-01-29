@@ -3,6 +3,7 @@ import { ClienteService } from './cliente.service';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { RecargarBilleteraDto } from './dto/recargar-billetera.dto';
 import { SolicitarPagoDto } from './dto/solicitar-pago.dto';
+import { ConfirmarPagoDto } from './dto/confirmar-pago.dto';
 
 @Controller('registroCliente')
 export class ClienteController {
@@ -26,5 +27,12 @@ export class ClienteController {
     async solicitarPago(@Body() solicitarPagoDto: SolicitarPagoDto) {
         const { documento, celular, valor } = solicitarPagoDto;
         return this.clienteService.solicitarPago(documento, celular, valor);
+    }
+
+    @Post('confirmarPago')
+    @HttpCode(HttpStatus.OK)
+    async confirmarPago(@Body() confirmarPagoDto: ConfirmarPagoDto) {
+        const { sessionId, token } = confirmarPagoDto;
+        return this.clienteService.confirmarPago(sessionId, token);
     }
 }
