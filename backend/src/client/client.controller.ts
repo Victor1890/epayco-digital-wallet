@@ -6,11 +6,11 @@ import { RequestPaymentDto } from './dto/request-payment.dto';
 import { ConfirmPaymentDto } from './dto/confirm-payment.dto';
 import { CheckBalanceDto } from './dto/check-balance.dto';
 
-@Controller('registroCliente')
+@Controller('/')
 export class ClientController {
     constructor(private readonly clientService: ClientService) { }
 
-    @Post()
+    @Post('registroCliente')
     @HttpCode(HttpStatus.CREATED)
     async create(@Body() createClienteDto: CreateClienteDto) {
         return this.clientService.createCliente(createClienteDto);
