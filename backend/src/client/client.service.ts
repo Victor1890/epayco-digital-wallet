@@ -1,22 +1,22 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Cliente } from './models/cliente.entity';
-import { CreateClienteDto } from './dto/create-cliente.dto';
+import { Client } from './models/client.entity';
+import { CreateClienteDto } from './dto/create-client.dto';
 import { randomInt } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
-export class ClienteService {
+export class ClientService {
     constructor(
-        @InjectRepository(Cliente)
-        private readonly clienteRepository: Repository<Cliente>,
+        @InjectRepository(Client)
+        private readonly clientRepository: Repository<Client>,
     ) { }
 
     async createCliente(createClienteDto: CreateClienteDto) {
         const { documento, email } = createClienteDto;
 
-        const existingCliente = await this.clienteRepository.findOne({
+        const existingCliente = await this.clientRepository.findOne({
             where: [{ documento }, { email }],
         });
 
@@ -24,25 +24,25 @@ export class ClienteService {
             throw new BadRequestException('Cliente with the same documento or email already exists.');
         }
 
-        const cliente = this.clienteRepository.create(createClienteDto);
-        return this.clienteRepository.save(cliente);
+        const cliente = this.clientRepository.create(createClienteDto);
+        return this.clientRepository.save(cliente);
     }
 
     async recargarBilletera(documento: string, celular: string, valor: number) {
-        const cliente = await this.clienteRepository.findOne({ where: { documento, celular } });
+        const cliente = await this.clientRepository.findOne({ where: { documento, celular } });
 
         if (!cliente) {
             throw new BadRequestException('Cliente not found or data mismatch.');
         }
 
         cliente.saldo += valor;
-        await this.clienteRepository.save(cliente);
+        await this.clientRepository.save(cliente);
 
         return { saldo: cliente.saldo };
     }
 
     async solicitarPago(documento: string, celular: string, valor: number) {
-        const cliente = await this.clienteRepository.findOne({ where: { documento, celular } });
+        const cliente = await this.clientRepository.findOne({ where: { documento, celular } });
 
         console.log('Cliente found:', cliente);
 
@@ -59,7 +59,7 @@ export class ClienteService {
 
         cliente.otp = otp;
         cliente.otpExpiration = otpExpiration;
-        await this.clienteRepository.save(cliente);
+        await this.clientRepository.save(cliente);
 
         // Simulate sending OTP via email (replace with actual email service)
         console.log(`Sending OTP ${otp} to ${cliente.email}`);
@@ -74,7 +74,7 @@ export class ClienteService {
     }
 
     async confirmarPago(sessionId: string, token: string): Promise<string> {
-        const cliente = await this.clienteRepository.findOne({ where: { otp: token } });
+        const cliente = await this.clientRepository.findOne({ where: { otp: token } });
 
         const valor = 0; // Placeholder since 'valor' is not passed in parameters
 
@@ -93,13 +93,13 @@ export class ClienteService {
         cliente.saldo -= valor;
         cliente.otp = null;
         cliente.otpExpiration = null;
-        await this.clienteRepository.save(cliente);
+        await this.clientRepository.save(cliente);
 
         return 'Payment confirmed successfully.';
     }
 
     async consultarSaldo(documento: string, celular: string): Promise<{ saldo: number }> {
-        const cliente = await this.clienteRepository.findOne({ where: { documento, celular } });
+        const cliente = await this.clientRepository.findOne({ where: { documento, celular } });
 
         if (!cliente) {
             throw new BadRequestException('Cliente not found or data mismatch.');

@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, Length } from 'class-validator';
 
-export class ConfirmarPagoDto {
+export class ConfirmPaymentDto {
     @IsNotEmpty()
     @IsString()
     sessionId: string;

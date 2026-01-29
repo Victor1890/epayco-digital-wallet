@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsNumber, Min } from 'class-validator';
 
-export class SolicitarPagoDto {
+export class ReloadWalletDto {
     @IsNotEmpty()
     @IsString()
     documento: string;

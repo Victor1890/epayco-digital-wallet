@@ -2,8 +2,8 @@ import { BaseEntity } from '@/shared/classes/base.entity';
 import { Exclude } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity({ name: 'clientes' })
-export class Cliente extends BaseEntity {
+@Entity({ name: 'clients' })
+export class Client extends BaseEntity {
     @Exclude({ toPlainOnly: true })
     @PrimaryGeneratedColumn()
     id: number;
