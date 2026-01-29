@@ -1,3 +1,3 @@
-import { UserModule } from '@/user/user.module';
+import { ClienteModule } from '@/cliente/cliente.module';
 
-export const appModules = [UserModule];
+export const appModules = [ClienteModule];
