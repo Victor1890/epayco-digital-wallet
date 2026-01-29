@@ -2,6 +2,7 @@ import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ClienteService } from './cliente.service';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { RecargarBilleteraDto } from './dto/recargar-billetera.dto';
+import { SolicitarPagoDto } from './dto/solicitar-pago.dto';
 
 @Controller('registroCliente')
 export class ClienteController {
@@ -18,5 +19,12 @@ export class ClienteController {
     async recargarBilletera(@Body() recargarBilleteraDto: RecargarBilleteraDto) {
         const { documento, celular, valor } = recargarBilleteraDto;
         return this.clienteService.recargarBilletera(documento, celular, valor);
+    }
+
+    @Post('solicitarPago')
+    @HttpCode(HttpStatus.OK)
+    async solicitarPago(@Body() solicitarPagoDto: SolicitarPagoDto) {
+        const { documento, celular, valor } = solicitarPagoDto;
+        return this.clienteService.solicitarPago(documento, celular, valor);
     }
 }

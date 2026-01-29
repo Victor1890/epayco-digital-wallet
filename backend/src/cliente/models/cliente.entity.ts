@@ -20,8 +20,14 @@ export class Cliente extends BaseEntity {
     @Column({ type: 'varchar', length: 15 })
     celular: string;
 
-    @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+    @Column({ type: 'double' })
     saldo: number;
+
+    @Column({ type: 'varchar', length: 6, nullable: true })
+    otp: string | null;
+
+    @Column({ type: 'timestamp', nullable: true })
+    otpExpiration: Date | null;
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
