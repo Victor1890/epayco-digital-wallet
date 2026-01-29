@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from '@/database/data-source';
 import { apiEnvValidation } from '@/shared/validators/api-env-validation.schema';
-import { appModules } from '@/shared/config/modules';
+import { ClientModule } from '@/client/client.module';
 
 @Module({
   imports: [
@@ -12,7 +12,7 @@ import { appModules } from '@/shared/config/modules';
       validationSchema: apiEnvValidation,
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
-    ...appModules,
+    ClientModule,
   ],
 })
 export class AppModule { }
