@@ -25,4 +25,17 @@ export class ClienteService {
         const cliente = this.clienteRepository.create(createClienteDto);
         return this.clienteRepository.save(cliente);
     }
+
+    async recargarBilletera(documento: string, celular: string, valor: number) {
+        const cliente = await this.clienteRepository.findOne({ where: { documento, celular } });
+
+        if (!cliente) {
+            throw new BadRequestException('Cliente not found or data mismatch.');
+        }
+
+        cliente.saldo += valor;
+        await this.clienteRepository.save(cliente);
+
+        return { saldo: cliente.saldo };
+    }
 }
