@@ -13,19 +13,18 @@ import { Button } from '@/modules/ui/components/button'
 import { useAuthStore } from '@/modules/auth/store/auth.store'
 import { useReloadBalance } from '../hooks/use-fetch'
 import { QUICK_AMOUNTS } from '../constants'
+import { cn } from '@/modules/ui/utils'
 
 export function RechargeForm() {
   const { data } = useAuthStore()
-
   const currentClient = data.client
 
   const { mutateAsync, isPending: isLoading } = useReloadBalance()
-
+  const [valor, setValor] = useState('')
   const [message, setMessage] = useState<{
     type: 'success' | 'error'
     text: string
   } | null>(null)
-  const [valor, setValor] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,29 +40,29 @@ export function RechargeForm() {
 
     console.log('Reload balance result:', result)
 
-    if ('saldo' in result) {
-      // Update local store balance
-      useAuthStore.getState().setData({
-        client: {
-          ...currentClient,
-          saldo: result.saldo,
-        },
-      })
+    const isSuccessful = result && result.saldo !== undefined
 
+    if (!isSuccessful) {
       setMessage({
-        type: 'success',
-        text: `Recarga exitosa. Nuevo saldo: $${result.saldo.toLocaleString('es-CO')}`,
+        type: 'error',
+        text: 'Hubo un error al procesar la recarga. Por favor, intenta nuevamente.',
       })
-
-      setValor('')
-
       return
     }
 
-    setMessage({
-      type: 'error',
-      text: 'Hubo un error al procesar la recarga. Por favor, intenta nuevamente.',
+    useAuthStore.getState().setData({
+      client: {
+        ...currentClient,
+        saldo: result.saldo,
+      },
     })
+
+    setMessage({
+      type: 'success',
+      text: `Recarga exitosa. Nuevo saldo: $${result.saldo.toLocaleString('es-CO')}`,
+    })
+
+    setValor('')
   }
 
   return (
@@ -113,11 +112,12 @@ export function RechargeForm() {
 
           {message && (
             <div
-              className={`rounded-lg p-3 text-sm ${
+              className={cn(
+                'rounded-lg p-3 text-sm',
                 message.type === 'success'
                   ? 'bg-primary/10 text-primary'
-                  : 'bg-destructive/10 text-destructive'
-              }`}
+                  : 'bg-destructive/10 text-destructive',
+              )}
             >
               {message.text}
             </div>
