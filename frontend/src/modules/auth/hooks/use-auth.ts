@@ -2,18 +2,26 @@ import { useMutation } from "@tanstack/react-query"
 import { LoginPayload, RegisterPayload } from "../api/interface";
 import { authProvider } from "../api";
 import { useAuthStore } from "../store/auth.store";
+import { loginServerAction } from "../api/server";
 
 export function useLoginAuth() {
     const data = useMutation({
         mutationKey: ['login-auth'],
-        mutationFn: async (_payload: LoginPayload) => {
+        mutationFn: async (payload: LoginPayload) => {
             const client = useAuthStore.getState().data.client;
 
-            if (client?.documento === _payload.documento && client?.celular === _payload.celular) {
-                return Promise.resolve({ success: true });
+            console.log("client: ", {
+                clientDoc: client?.documento,
+                clientCel: client?.celular,
+                payloadDoc: payload.documento,
+                payloadCel: payload.celular
+            }, payload)
+
+            if (client?.documento == payload.documento && client?.celular == payload.celular) {
+                return loginServerAction({ data: client })
             }
 
-            return Promise.reject({ messsage: 'Credenciales invalidas' });
+            return Promise.reject(new Error('Credenciales inválidas'));
         },
     })
 
@@ -27,7 +35,7 @@ export function useLoginAuth() {
 export function useRegisterAuth() {
     const data = useMutation({
         mutationKey: ['register-auth'],
-        mutationFn: async (payload: RegisterPayload) => {
+        mutationFn: (payload: RegisterPayload) => {
             return authProvider.register(payload)
         },
         onSuccess(data) {

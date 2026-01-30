@@ -28,7 +28,7 @@ export const LOCAL_STORAGE_AUTH_KEY = 'auth-storage';
 export const useAuthStore = create<AuthState>(
     persist(authStore, {
         name: LOCAL_STORAGE_AUTH_KEY,
-        storage: createJSONStorage(() => sessionStorage),
+        storage: createJSONStorage(() => localStorage),
         partialize: (state) => Object.fromEntries(Object.entries(state).filter(([key]) => DATA_IN_STORAGE_KEYS.includes(key)))
     }) as any
 );

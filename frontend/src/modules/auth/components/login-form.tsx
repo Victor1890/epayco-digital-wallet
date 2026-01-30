@@ -12,8 +12,11 @@ import { Input } from '@/modules/ui/components/input'
 import { Button } from '@/modules/ui/components/button'
 import { useLoginAuth } from '../hooks/use-auth'
 import { LoginPayload } from '../api/interface'
+import { useRouter } from '@tanstack/react-router'
 
 export function LoginForm() {
+  const router = useRouter()
+
   const [formData, setFormData] = useState<LoginPayload>({
     celular: '',
     documento: '',
@@ -29,6 +32,8 @@ export function LoginForm() {
     if (!result.success) {
       return
     }
+
+    router.navigate('/dashboard')
   }
 
   return (
@@ -83,7 +88,7 @@ export function LoginForm() {
             </div>
           </div>
 
-          {error && (
+          {error?.message && (
             <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
               {error.message}
             </div>
