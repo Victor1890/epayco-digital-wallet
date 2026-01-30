@@ -1,11 +1,12 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import type { StateCreator } from 'zustand';
-import { Client } from '../session';
+import { Client, Transaction } from '../session';
 
 interface AuthState {
     data: {
         client: Client
+        transactions?: Transaction[]
     };
     setData: (data: AuthState['data'] | ((prev: AuthState['data']) => AuthState['data'])) => void;
     clearData: () => void;

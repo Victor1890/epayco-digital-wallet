@@ -10,6 +10,14 @@ export interface Client {
     createdAt: string
 }
 
+export interface Transaction {
+    id: string;
+    tipo: "recarga" | "pago";
+    monto: number;
+    fecha: string;
+    descripcion: string;
+}
+
 export type SessionData = {
     isLogged: boolean
     user: Client | null
