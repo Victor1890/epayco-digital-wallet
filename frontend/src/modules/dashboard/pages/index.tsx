@@ -1,6 +1,7 @@
 import { MainLayout } from '@/modules/ui/main-layout'
 import { BalanceCard } from '../components/balance-card'
 import { RechargeForm } from '../components/recharge-form'
+import { PaymentForm } from '../components/payment-form'
 
 export function DashboardPage() {
   return (
@@ -10,7 +11,7 @@ export function DashboardPage() {
 
         <div className="grid gap-6 md:grid-cols-2">
           <RechargeForm />
-          {/* <PaymentForm /> */}
+          <PaymentForm />
         </div>
 
         {/* <TransactionsList /> */}
