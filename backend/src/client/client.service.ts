@@ -1,17 +1,20 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Service } from '@/shared/classes/base.service';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Client } from './models/client.entity';
-import { CreateClienteDto } from './dto/create-client.dto';
 import { randomInt } from 'crypto';
+import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+import { CreateClienteDto } from './dto/create-client.dto';
+import { Client } from './models/client.entity';
 
 @Injectable()
-export class ClientService {
+export class ClientService extends Service<Client> {
     constructor(
         @InjectRepository(Client)
         private readonly clientRepository: Repository<Client>,
-    ) { }
+    ) {
+        super(Client.name, clientRepository);
+    }
 
     async createCliente(createClienteDto: CreateClienteDto) {
         const { documento, email } = createClienteDto;
