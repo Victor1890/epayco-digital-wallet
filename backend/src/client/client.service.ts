@@ -1,17 +1,22 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Service } from '@/shared/classes/base.service';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Client } from './models/client.entity';
-import { CreateClienteDto } from './dto/create-client.dto';
-import { randomInt } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
+import { TokenService } from '../token/token.service';
+import { CreateClienteDto } from './dto/create-client.dto';
+import { Client } from './models/client.entity';
+import { EnumTokenType } from '@/token/shared/enums/types.interface';
 
 @Injectable()
-export class ClientService {
+export class ClientService extends Service<Client> {
     constructor(
         @InjectRepository(Client)
         private readonly clientRepository: Repository<Client>,
-    ) { }
+        private readonly tokenService: TokenService,
+    ) {
+        super(Client.name, clientRepository);
+    }
 
     async createCliente(createClienteDto: CreateClienteDto) {
         const { documento, email } = createClienteDto;
@@ -42,60 +47,51 @@ export class ClientService {
     }
 
     async solicitarPago(documento: string, celular: string, valor: number) {
-        const cliente = await this.clientRepository.findOne({ where: { documento, celular } });
+        const client = await this.clientRepository.findOne({ where: { documento, celular } });
 
-        console.log('Cliente found:', cliente);
-
-        if (!cliente) {
+        if (!client) {
             throw new BadRequestException('Cliente not found or data mismatch.');
         }
 
-        if (cliente.saldo < valor) {
+        if (client.saldo < valor) {
             throw new BadRequestException('Insufficient balance.');
         }
 
-        const otp = randomInt(100000, 999999).toString();
-        const otpExpiration = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes expiration
-
-        cliente.otp = otp;
-        cliente.otpExpiration = otpExpiration;
-        await this.clientRepository.save(cliente);
-
-        // Simulate sending OTP via email (replace with actual email service)
-        console.log(`Sending OTP ${otp} to ${cliente.email}`);
-
-        const sessionId = uuidv4();
+        const token = await this.tokenService.create(client, 'PAYMENT_CONFIRMATION', { valor });
 
         return {
-            message: 'OTP sent to registered email.',
-            sessionId,
-            token: otp, // In real scenario, do not return the token
+            sessionId: client.uuid,
+            token
         };
     }
 
-    async confirmarPago(sessionId: string, token: string): Promise<string> {
-        const cliente = await this.clientRepository.findOne({ where: { otp: token } });
+    async confirmarPago(sessionId: string, token: string) {
 
-        const valor = 0; // Placeholder since 'valor' is not passed in parameters
+        const client = await this.clientRepository.findOne({ where: { uuid: sessionId } });
 
-        if (!cliente) {
-            throw new BadRequestException('Invalid token or session ID.');
+        if (!client) {
+            throw new BadRequestException('Invalid session ID.');
         }
 
-        if (!cliente.otpExpiration || cliente.otpExpiration < new Date()) {
-            throw new BadRequestException('Token has expired.');
-        }
+        const tokenEntity = await this.tokenService.findOne({ where: { clientId: client.id, type: EnumTokenType.PAYMENT_CONFIRMATION } });
+        this.tokenService.validateToken(tokenEntity, EnumTokenType.PAYMENT_CONFIRMATION);
 
-        if (cliente.saldo < valor) {
+        const isTokenValid = this.tokenService.verifyToken(token, tokenEntity!.token);
+
+        if (!isTokenValid) {
+            throw new BadRequestException('Invalid token.');
+        }
+        const session = tokenEntity!.payload as { valor: number };
+
+        if (client.saldo < session.valor) {
             throw new BadRequestException('Insufficient balance.');
         }
 
-        cliente.saldo -= valor;
-        cliente.otp = null;
-        cliente.otpExpiration = null;
-        await this.clientRepository.save(cliente);
+        client.saldo -= session.valor;
+        await this.clientRepository.save(client);
+        await this.tokenService.updateTokenAsUsed(tokenEntity!.id);
 
-        return 'Payment confirmed successfully.';
+        return { isValid: true };
     }
 
     async consultarSaldo(documento: string, celular: string): Promise<{ saldo: number }> {
