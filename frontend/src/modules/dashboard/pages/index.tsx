@@ -2,6 +2,7 @@ import { MainLayout } from '@/modules/ui/main-layout'
 import { BalanceCard } from '../components/balance-card'
 import { RechargeForm } from '../components/recharge-form'
 import { PaymentForm } from '../components/payment-form'
+import { TransactionsList } from '../components/transactions-list'
 
 export function DashboardPage() {
   return (
@@ -14,7 +15,7 @@ export function DashboardPage() {
           <PaymentForm />
         </div>
 
-        {/* <TransactionsList /> */}
+        <TransactionsList />
       </div>
     </MainLayout>
   )

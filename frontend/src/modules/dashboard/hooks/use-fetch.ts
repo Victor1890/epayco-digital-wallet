@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { dashboardProvider } from "../api";
 import { CheckBalancePayload, ConfirmPaymentPayload, ReloadBalancePayload, RequestPaymentPayload } from "../api/interface";
 

@@ -11,7 +11,7 @@ import { RequestView } from './request-view'
 
 export function PaymentForm() {
   const {
-    data: { client: currentClient },
+    data: { client: currentClient, transactions: transactionsClient },
     setData: setAuthData,
   } = useAuthStore()
 
@@ -105,6 +105,16 @@ export function PaymentForm() {
           ...currentClient,
           saldo: balanceResult.saldo,
         },
+        transactions: [
+          ...(transactionsClient || []),
+          {
+            tipo: 'pago',
+            monto: Number(payload.valor),
+            fecha: new Date().toISOString(),
+            descripcion: 'Pago de billetera',
+            id: Math.random().toString(36).substring(2, 15),
+          },
+        ],
       })
 
       handleCancel()

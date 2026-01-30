@@ -16,7 +16,7 @@ import { QUICK_AMOUNTS } from '../constants'
 import { cn } from '@/modules/ui/utils'
 
 export function RechargeForm() {
-  const { data } = useAuthStore()
+  const { data, setData } = useAuthStore()
   const currentClient = data.client
 
   const { mutateAsync, isPending: isLoading } = useReloadBalance()
@@ -38,8 +38,6 @@ export function RechargeForm() {
       valor: Number(valor),
     })
 
-    console.log('Reload balance result:', result)
-
     const isSuccessful = result && result.saldo !== undefined
 
     if (!isSuccessful) {
@@ -50,11 +48,21 @@ export function RechargeForm() {
       return
     }
 
-    useAuthStore.getState().setData({
+    setData({
       client: {
         ...currentClient,
         saldo: result.saldo,
       },
+      transactions: [
+        ...(data.transactions || []),
+        {
+          tipo: 'recarga',
+          monto: Number(valor),
+          fecha: new Date().toISOString(),
+          descripcion: 'Recarga de billetera',
+          id: Math.random().toString(36).substring(2, 15),
+        },
+      ],
     })
 
     setMessage({
