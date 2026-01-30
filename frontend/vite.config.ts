@@ -7,9 +7,16 @@ import tailwindcss from '@tailwindcss/vite'
 
 const config = defineConfig({
   envPrefix: ['VITE_', 'EPAYCO_'],
+  server: {
+    host: true,
+    port: Number(process.env.PORT),
+    strictPort: true,
+    watch: {
+      usePolling: true
+    }
+  },
   plugins: [
     devtools(),
-    // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),
