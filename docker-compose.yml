@@ -1,4 +1,42 @@
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend_ssr
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - EPAYCO_BACKEND_URL=http://localhost:4000
+      - EPAYCO_SESSION_COOKIE_NAME=session_id
+      - EPAYCO_SESSION_SECRET=your_session_secret_here
+    ports:
+      - "3000:3000"
+    networks:
+      - app_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend_api
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - FRONTEND_URL=http://localhost:3000
+      - MYSQL_MIGRATIONS_TABLE=migrations
+      - MYSQL_DB_URI=mysql://root:root@mysql:3306/epayco_db
+    ports:
+      - "4000:4000"
+    networks:
+      - app_network
+
   mysql:
     image: mysql:8.4
     container_name: mysql_db
