@@ -7,11 +7,16 @@ import axios, {
     RawAxiosRequestHeaders,
 } from 'axios'
 
+export function getAPIBaseURL(): string {
+    const backendURL = import.meta.env.EPAYCO_BACKEND_URL
+    return String(backendURL)
+}
+
 export class BaseFetchProvider {
     private readonly axios: AxiosInstance
 
     constructor(
-        api: string,
+        api = getAPIBaseURL(),
         config?: AxiosRequestConfig,
         headers?: RawAxiosRequestHeaders | AxiosHeaders | Partial<HeadersDefaults>,
     ) {

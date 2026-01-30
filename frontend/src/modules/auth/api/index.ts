@@ -3,7 +3,7 @@ import { LoginPayload, LoginResponse, RegisterPayload, RegisterResponse } from "
 
 export class AuthProvider extends BaseFetchProvider {
     constructor() {
-        super('/');
+        super();
     }
 
     login(_payload: LoginPayload) {
