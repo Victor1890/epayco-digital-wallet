@@ -5,7 +5,11 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 
 export function RootComponent() {
   return (
-    <html lang="es-DO" className="min-h-full" suppressHydrationWarning>
+    <html
+      lang="es-DO"
+      className="min-h-full font-sans"
+      suppressHydrationWarning
+    >
       <head>
         <HeadContent />
       </head>

@@ -1,6 +1,6 @@
 import { useSession } from '@tanstack/react-start/server'
 
-interface Client {
+export interface Client {
     uuid: string,
     documento: string,
     nombres: string,
