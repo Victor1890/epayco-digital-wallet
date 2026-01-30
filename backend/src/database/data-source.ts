@@ -2,8 +2,9 @@ import os from 'os';
 import * as path from 'path';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
+import 'dotenv/config';
 
-process.loadEnvFile();
+// process.loadEnvFile();
 
 let seedsPath = path.join(__dirname, '/seeding/seeds/*.{ts,js}');
 

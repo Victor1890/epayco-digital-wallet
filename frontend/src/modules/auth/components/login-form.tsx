@@ -33,7 +33,9 @@ export function LoginForm() {
       return
     }
 
-    router.navigate('/dashboard')
+    router.navigate({
+      to: '/dashboard',
+    })
   }
 
   return (
