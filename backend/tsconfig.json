@@ -31,5 +31,5 @@
   },
   "include": ["src", "types", "test"],
   "exclude": ["node_modules", "dist"],
-  "files": ["types/**.d.ts"]
+  "files": ["types/index.d.ts"]
 }

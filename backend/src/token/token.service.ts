@@ -1,3 +1,5 @@
+import { Client } from '@/client/models/client.entity';
+import { Service } from '@/shared/classes/base.service';
 import {
   BadRequestException,
   GoneException,
@@ -10,7 +12,6 @@ import { Repository } from 'typeorm';
 import { Token } from './models/token.entity';
 import { EnumTokenType, TokenType } from './shared/enums/types.interface';
 import { IToken } from './shared/interfaces/token.interface';
-import { Service } from '@/shared/classes/base.service';
 
 @Injectable()
 export class TokenService extends Service<Token> {
@@ -23,15 +24,16 @@ export class TokenService extends Service<Token> {
 
   /**
    * Creates a new hashed token for a user.
-   * @param {IUser} user - The user requesting the token.
-   * @param {TokenType} type - The type of token (default: RESET_PASSWORD).
+   * @param {Client} client - The client requesting the token.
+   * @param {TokenType} type - The type of token.
    * @returns A promise that resolves to the unhashed token string.
    */
   async create(
-    user: IUser | LoggedUserData,
-    type: TokenType = EnumTokenType.RESET_PASSWORD,
+    client: Client,
+    type: TokenType,
+    payload?: ObjectI,
   ): Promise<string> {
-    await this.invalidateExistingTokens(user.id);
+    await this.invalidateExistingTokens(client.id);
 
     const plainToken = this.generateToken();
     const hashedToken = this.hashToken(plainToken);
@@ -41,37 +43,40 @@ export class TokenService extends Service<Token> {
       type,
       token: hashedToken,
       expiredAt: expirationTime,
-      userId: user.id,
+      clientId: client.id,
       used: false,
+      payload
     });
 
     await this.tokenRepository.save(tokenEntity);
     return plainToken;
   }
 
+  async updateTokenAsUsed(tokenId: number): Promise<void> {
+    await this.tokenRepository.update({ id: tokenId }, { used: true });
+  }
+
   /**
    * Invalidates any existing tokens for a user.
-   * @param {number} userId - The user's ID.
+   * @param {number} clientId - The client's ID.
    */
-  private async invalidateExistingTokens(userId: number): Promise<void> {
-    await this.tokenRepository.softDelete({ userId });
+  private async invalidateExistingTokens(clientId: number): Promise<void> {
+    await this.tokenRepository.softDelete({ clientId });
   }
 
-  /**
-   * Generates a random 32-byte token.
-   * @returns {string} A random token in hex format.
-   */
   private generateToken(): string {
-    return randomBytes(32).toString('hex');
+    const buffer = randomBytes(3); // 3 bytes = 24 bits
+    const token = buffer.readUIntBE(0, 3) % 1000000; // Limit to 6 digits
+    return token.toString().padStart(6, '0'); // Pad with leading zeros if necessary
   }
 
-  /**
-   * Hashes a token using SHA-256.
-   * @param {string} token - The token to hash.
-   * @returns {string} The hashed token.
-   */
   private hashToken(token: string): string {
     return createHash('sha256').update(token).digest('hex');
+  }
+
+  verifyToken(plainToken: string, hashedToken: string): boolean {
+    const hashedInputToken = this.hashToken(plainToken);
+    return hashedInputToken === hashedToken;
   }
 
   /**

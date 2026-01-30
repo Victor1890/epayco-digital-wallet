@@ -1,7 +1,7 @@
 import { BaseEntity } from '@/shared/classes/base.entity';
 import { Token } from '@/token/models/token.entity';
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany, VersionColumn, DeleteDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany, VersionColumn, DeleteDateColumn, Generated } from 'typeorm';
 import { IClient } from '../shared/interfaces/client.interface';
 
 @Entity({ name: 'clients' })
@@ -9,6 +9,10 @@ export class Client extends BaseEntity implements IClient {
     @Exclude({ toPlainOnly: true })
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Generated('uuid')
+    @Column()
+    uuid: string;
 
     @Column({ type: 'varchar', length: 255, unique: true })
     documento: string;
@@ -22,7 +26,7 @@ export class Client extends BaseEntity implements IClient {
     @Column({ type: 'varchar', length: 15 })
     celular: string;
 
-    @Column({ type: 'double' })
+    @Column({ type: 'double', default: 0 })
     saldo: number;
 
     @CreateDateColumn({ type: 'datetime', name: 'created_at' })
