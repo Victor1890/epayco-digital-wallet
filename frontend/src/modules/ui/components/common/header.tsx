@@ -1,12 +1,18 @@
+import { useAuthStore } from '@/modules/auth/store/auth.store'
 import { Button } from '@/modules/ui/components/button'
-import { Route } from '@/routes/__root'
-import { Link, useRouteContext } from '@tanstack/react-router'
+import { useRouter } from '@tanstack/react-router'
 import { LogOut, Wallet } from 'lucide-react'
 
 export function Header() {
-  const { session } = useRouteContext({ from: Route.id })
+  const { data } = useAuthStore()
+  const currentClient = data.client
 
-  const currentClient = session?.user
+  const router = useRouter()
+
+  const handleSignOut = () => {
+    useAuthStore.getState().clearData()
+    router.navigate({ to: '/' })
+  }
 
   return (
     <header className="border-b border-border bg-card">
@@ -38,13 +44,11 @@ export function Header() {
             <Button
               variant="ghost"
               size="icon"
-              className="text-muted-foreground hover:text-foreground"
-              asChild
+              className="text-muted-foreground hover:text-foreground cursor-pointer"
+              onClick={handleSignOut}
             >
-              <Link to="/">
-                <LogOut className="h-4 w-4" />
-                <span className="sr-only">Cerrar sesion</span>
-              </Link>
+              <LogOut className="h-4 w-4" />
+              <span className="sr-only">Cerrar sesion</span>
             </Button>
           </div>
         )}
