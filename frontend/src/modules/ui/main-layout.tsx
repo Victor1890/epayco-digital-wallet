@@ -8,7 +8,7 @@ interface MainLayoutProps {
 export function MainLayout({ children }: Readonly<MainLayoutProps>) {
   return (
     <DefaultLayout>
-      <main>{children}</main>
+      <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
     </DefaultLayout>
   )
 }

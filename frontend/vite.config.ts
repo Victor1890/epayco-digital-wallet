@@ -6,6 +6,7 @@ import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 
 const config = defineConfig({
+  envPrefix: ['VITE_', 'EPAYCO_'],
   plugins: [
     devtools(),
     // this is the plugin that enables path aliases
