@@ -5,6 +5,8 @@
 ## Resumen del Proyecto
 Backend de la billetera digital Epayco. Proporciona una API RESTful para la gestión de clientes, recarga de saldo, pagos y confirmación de transacciones, utilizando NestJS y MySQL. Incluye autenticación por tokens y arquitectura modular.
 
+---
+
 ## Tabla de Contenidos
 - [Resumen del Proyecto](#resumen-del-proyecto)
 - [Instalación de Requisitos Previos](#instalación-de-requisitos-previos)
@@ -19,61 +21,69 @@ Backend de la billetera digital Epayco. Proporciona una API RESTful para la gest
 - [Principales Dependencias](#principales-dependencias)
 - [Contribuyendo](#contribuyendo)
 
+---
+
 ## Instalación de Requisitos Previos
-- Node.js >= 22.0.0 (recomendado: v22.21.1, ver `.nvmrc`)
-- pnpm >= 10.11.0
-- MySQL >= 8.0
-- Git
+- **Node.js** >= 22.0.0 (recomendado: v22.21.1, ver `.nvmrc`). Descárgalo desde [Node.js](https://nodejs.org/).
+- **pnpm** >= 10.11.0. Instálalo siguiendo las instrucciones en [pnpm](https://pnpm.io/installation).
+- **MySQL** >= 8.0. Descárgalo desde [MySQL](https://dev.mysql.com/downloads/).
+- **Git**. Descárgalo desde [Git](https://git-scm.com/).
+
+---
 
 ## Cómo Descargar e Instalar Dependencias
 1. Clona el repositorio:
-	```sh
-	git clone <REPO_URL>
-	cd epayco-digital-wallet/backend
-	```
+   ```bash
+   git clone <REPO_URL>
+   cd epayco-digital-wallet/backend
+   ```
 2. Copia el archivo de variables de entorno:
-	```sh
-	cp .env.example .env
-	```
+   ```bash
+   cp .env.example .env
+   ```
 3. Configura las variables de entorno críticas en `.env` (ver sección [Variables de Entorno](#variables-de-entorno)).
 4. Instala las dependencias:
-	```sh
-	pnpm install
-	```
+   ```bash
+   pnpm install
+   ```
+
+---
 
 ## Cómo Ejecutar el Proyecto
 
 ### Desarrollo Local
 1. Asegúrate de tener una base de datos MySQL corriendo y configurada en `.env`.
 2. Inicia el servidor de desarrollo con hot reload:
-	```sh
-	pnpm dev
-	```
-	El backend se ejecuta por defecto en http://localhost:4000
+   ```bash
+   pnpm dev
+   ```
+   El backend se ejecuta por defecto en [http://localhost:4000](http://localhost:4000).
 
 ### Producción
 1. Compila el proyecto:
-	```sh
-	pnpm build
-	```
+   ```bash
+   pnpm build
+   ```
 2. Inicia el servidor en modo producción:
-	```sh
-	pnpm start:prod
-	```
+   ```bash
+   pnpm start:prod
+   ```
 
 ### Migraciones y Seeds
 - Ejecuta migraciones:
-  ```sh
+  ```bash
   pnpm migration:run
   ```
 - Revertir la última migración:
-  ```sh
+  ```bash
   pnpm migration:revert
   ```
 - Ejecutar seeds:
-  ```sh
+  ```bash
   pnpm seed:run
   ```
+
+---
 
 ## Cómo Ejecutar el Proyecto con Docker
 
@@ -83,16 +93,16 @@ Backend de la billetera digital Epayco. Proporciona una API RESTful para la gest
 ### Pasos para Levantar el Proyecto
 1. Asegúrate de que los puertos necesarios (por defecto: `4000` para el backend y `3306` para MySQL) estén disponibles en tu máquina.
 2. Copia el archivo de variables de entorno:
-   ```sh
+   ```bash
    cp .env.example .env
    ```
 3. Configura las variables de entorno críticas en `.env` (ver sección [Variables de Entorno](#variables-de-entorno)).
 4. Construye la imagen de Docker para el backend:
-   ```sh
+   ```bash
    docker build -t epayco-backend .
    ```
 5. Levanta un contenedor para la base de datos MySQL:
-   ```sh
+   ```bash
    docker run -d \
      --name epayco-mysql \
      -e MYSQL_ROOT_PASSWORD=root \
@@ -101,7 +111,7 @@ Backend de la billetera digital Epayco. Proporciona una API RESTful para la gest
      mysql:8.0
    ```
 6. Levanta un contenedor para el backend:
-   ```sh
+   ```bash
    docker run -d \
      --name epayco-backend \
      --env-file .env \
@@ -112,15 +122,15 @@ Backend de la billetera digital Epayco. Proporciona una API RESTful para la gest
 
 ### Comandos Útiles
 - Detener un contenedor:
-  ```sh
+  ```bash
   docker stop <container_name>
   ```
 - Ver logs de un contenedor:
-  ```sh
+  ```bash
   docker logs -f <container_name>
   ```
 - Eliminar un contenedor:
-  ```sh
+  ```bash
   docker rm <container_name>
   ```
 
@@ -132,7 +142,7 @@ Backend de la billetera digital Epayco. Proporciona una API RESTful para la gest
 
 ## Variables de Entorno
 Ejemplo de `.env`:
-```sh
+```ini
 NODE_ENV=development
 
 PORT=4000
@@ -142,6 +152,13 @@ FRONTEND_URL=http://localhost:3000
 MYSQL_MIGRATIONS_TABLE=migrations
 MYSQL_DB_URI=mysql://root:root@localhost:3306/epayco_db
 ```
+- **NODE_ENV**: Define el entorno de ejecución (`development`, `production`).
+- **PORT**: Puerto en el que se ejecutará el backend.
+- **FRONTEND_URL**: URL del frontend para configurar CORS.
+- **MYSQL_MIGRATIONS_TABLE**: Nombre de la tabla para las migraciones de TypeORM.
+- **MYSQL_DB_URI**: URI de conexión a la base de datos MySQL.
+
+---
 
 ## Resumen de Carpetas
 - **src/**: Código fuente principal
@@ -153,6 +170,8 @@ MYSQL_DB_URI=mysql://root:root@localhost:3306/epayco_db
   - **shared/**: Clases base, enums, validadores, errores comunes
 - **public/**: Archivos públicos/estáticos
 - **types/**: Tipos globales TypeScript
+
+---
 
 ## Principales Dependencias
 - **@nestjs/core**: ^11.0.1
@@ -168,8 +187,10 @@ MYSQL_DB_URI=mysql://root:root@localhost:3306/epayco_db
 - **joi**: 18.0.2
 - **uuid**: 13.0.0
 
+---
+
 ## Scripts Útiles
-```sh
+```bash
 pnpm dev            # Desarrollo con hot reload
 pnpm build          # Compila el proyecto
 pnpm start:prod     # Ejecuta en producción
@@ -180,15 +201,21 @@ pnpm format         # Formatea código con Prettier
 pnpm test           # Ejecuta pruebas unitarias
 ```
 
+---
+
 ## Contribuyendo
 1. Crea una rama para tu feature:
-	```sh
-	git checkout -b feat/mi-feature
-	```
+   ```bash
+   git checkout -b feat/mi-feature
+   ```
 2. Realiza tus cambios siguiendo las buenas prácticas de NestJS y TypeScript.
-3. Asegúrate de que el código pase todas las validaciones (`pnpm lint`, `pnpm test`).
+3. Asegúrate de que el código pase todas las validaciones:
+   ```bash
+   pnpm lint
+   pnpm test
+   ```
 4. Haz commit siguiendo [Conventional Commits](https://www.conventionalcommits.org/):
-	```sh
-	git commit -m 'feat: agrega nueva funcionalidad'
-	```
+   ```bash
+   git commit -m "feat: agrega nueva funcionalidad"
+   ```
 5. Abre un Pull Request con una descripción clara de los cambios.
