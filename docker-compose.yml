@@ -3,7 +3,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: frontend_ssr
+    container_name: epayco_frontend
     restart: unless-stopped
     depends_on:
       - backend
@@ -22,7 +22,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: backend_api
+    container_name: epayco_backend
     restart: unless-stopped
     depends_on:
       - mysql
@@ -31,7 +31,7 @@ services:
       - PORT=4000
       - FRONTEND_URL=http://localhost:3000
       - MYSQL_MIGRATIONS_TABLE=migrations
-      - MYSQL_DB_URI=mysql://root:root@mysql:3306/epayco_db
+      - MYSQL_DB_URI=mysql://root:root@epayco_mysql:3306/epayco_db
     ports:
       - "4000:4000"
     networks:
@@ -39,7 +39,7 @@ services:
 
   mysql:
     image: mysql:8.4
-    container_name: mysql_db
+    container_name: epayco_mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
