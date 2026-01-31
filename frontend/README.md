@@ -5,6 +5,8 @@
 ## Resumen del Proyecto
 Frontend de la billetera digital Epayco. Permite a los usuarios registrarse, iniciar sesión, recargar saldo, realizar pagos y consultar historial de transacciones. Construido con React 19, Vite, TanStack Router/Query, Zustand y Tailwind CSS.
 
+---
+
 ## Tabla de Contenidos
 - [Resumen del Proyecto](#resumen-del-proyecto)
 - [Instalación de Requisitos Previos](#instalación-de-requisitos-previos)
@@ -18,46 +20,54 @@ Frontend de la billetera digital Epayco. Permite a los usuarios registrarse, ini
 - [Principales Dependencias](#principales-dependencias)
 - [Contribuyendo](#contribuyendo)
 
+---
+
 ## Instalación de Requisitos Previos
-- Node.js >= 22.0.0 (recomendado: v22.21.1, ver `.nvmrc`)
-- pnpm >= 10.11.0
-- Git
+- **Node.js** >= 22.0.0 (recomendado: v22.21.1, ver `.nvmrc`). Descárgalo desde [Node.js](https://nodejs.org/).
+- **pnpm** >= 10.11.0. Instálalo siguiendo las instrucciones en [pnpm](https://pnpm.io/installation).
+- **Git**. Descárgalo desde [Git](https://git-scm.com/).
+
+---
 
 ## Cómo Descargar e Instalar Dependencias
 1. Clona el repositorio:
-	```sh
-	git clone <REPO_URL>
-	cd epayco-digital-wallet/frontend
-	```
+   ```bash
+   git clone <REPO_URL>
+   cd epayco-digital-wallet/frontend
+   ```
 2. Copia el archivo de variables de entorno:
-	```sh
-	cp .env.example .env
-	```
+   ```bash
+   cp .env.example .env
+   ```
 3. Configura las variables de entorno críticas en `.env` (ver sección [Variables de Entorno](#variables-de-entorno)).
 4. Instala las dependencias:
-	```sh
-	pnpm install
-	```
+   ```bash
+   pnpm install
+   ```
+
+---
 
 ## Cómo Ejecutar el Proyecto
 
 ### Desarrollo Local
 1. Asegúrate de tener el backend ejecutándose.
 2. Inicia el servidor de desarrollo:
-	```sh
-	pnpm dev
-	```
-	Por defecto en http://localhost:3000
+   ```bash
+   pnpm dev
+   ```
+   Por defecto en [http://localhost:3000](http://localhost:3000).
 
 ### Producción
 1. Compila el proyecto:
-	```sh
-	pnpm build
-	```
+   ```bash
+   pnpm build
+   ```
 2. Previsualiza el build:
-	```sh
-	pnpm preview
-	```
+   ```bash
+   pnpm preview
+   ```
+
+---
 
 ## Cómo Ejecutar el Proyecto con Docker
 
@@ -67,16 +77,16 @@ Frontend de la billetera digital Epayco. Permite a los usuarios registrarse, ini
 ### Pasos para Levantar el Proyecto
 1. Asegúrate de que los puertos necesarios (por defecto: `3000` para el frontend) estén disponibles en tu máquina.
 2. Copia el archivo de variables de entorno:
-   ```sh
+   ```bash
    cp .env.example .env
    ```
 3. Configura las variables de entorno críticas en `.env` (ver sección [Variables de Entorno](#variables-de-entorno)).
 4. Construye la imagen de Docker para el frontend:
-   ```sh
+   ```bash
    docker build -t epayco-frontend .
    ```
 5. Levanta un contenedor para el frontend:
-   ```sh
+   ```bash
    docker run -d \
      --name epayco-frontend \
      --env-file .env \
@@ -87,15 +97,15 @@ Frontend de la billetera digital Epayco. Permite a los usuarios registrarse, ini
 
 ### Comandos Útiles
 - Detener un contenedor:
-  ```sh
+  ```bash
   docker stop <container_name>
   ```
 - Ver logs de un contenedor:
-  ```sh
+  ```bash
   docker logs -f <container_name>
   ```
 - Eliminar un contenedor:
-  ```sh
+  ```bash
   docker rm <container_name>
   ```
 
@@ -107,7 +117,7 @@ Frontend de la billetera digital Epayco. Permite a los usuarios registrarse, ini
 
 ## Variables de Entorno
 Ejemplo de `.env`:
-```sh
+```ini
 PORT=3000
 
 EPAYCO_BACKEND_URL=http://localhost:4000
@@ -116,6 +126,13 @@ EPAYCO_COOKIE_NAME=epayco_session
 EPAYCO_SESSION_COOKIE_NAME=session_id
 EPAYCO_SESSION_SECRET=your_session_secret_here
 ```
+- **PORT**: Puerto en el que se ejecutará el frontend.
+- **EPAYCO_BACKEND_URL**: URL del backend para las solicitudes API.
+- **EPAYCO_COOKIE_NAME**: Nombre de la cookie principal.
+- **EPAYCO_SESSION_COOKIE_NAME**: Nombre de la cookie de sesión.
+- **EPAYCO_SESSION_SECRET**: Secreto para firmar las cookies de sesión.
+
+---
 
 ## Resumen de Carpetas
 - **public/**: Archivos estáticos (logos, manifest, etc.)
@@ -127,18 +144,22 @@ EPAYCO_SESSION_SECRET=your_session_secret_here
   - **routes/**: Definición de rutas principales
 - **styles.css**: Estilos globales
 
+---
+
 ## Principales Dependencias
-- **React**: ^19.2.0
-- **Vite**: ^7.1.7
-- **@tanstack/react-router**: ^1.132.0
-- **@tanstack/react-query**: ^5.66.5
+- **React**: 19.2.0
+- **Vite**: 7.1.7
+- **@tanstack/react-router**: 1.132.0
+- **@tanstack/react-query**: 5.66.5
 - **Zustand**: 5.0.10
-- **Tailwind CSS**: ^4.0.6
-- **Lucide React**: ^0.544.0
+- **Tailwind CSS**: 4.0.6
+- **Lucide React**: 0.544.0
 - **Axios**: 1.13.4
 
+---
+
 ## Scripts Útiles
-```sh
+```bash
 pnpm dev        # Desarrollo con hot reload
 pnpm build      # Compila el proyecto
 pnpm preview    # Previsualiza el build
@@ -148,15 +169,21 @@ pnpm check      # Lint + Format
 pnpm test       # Ejecuta pruebas unitarias
 ```
 
+---
+
 ## Contribuyendo
 1. Crea una rama para tu feature:
-	```sh
-	git checkout -b feat/mi-feature
-	```
+   ```bash
+   git checkout -b feat/mi-feature
+   ```
 2. Realiza tus cambios siguiendo buenas prácticas de React y TypeScript.
-3. Asegúrate de que el código pase todas las validaciones (`pnpm lint`, `pnpm test`).
+3. Asegúrate de que el código pase todas las validaciones:
+   ```bash
+   pnpm lint
+   pnpm test
+   ```
 4. Haz commit siguiendo [Conventional Commits](https://www.conventionalcommits.org/):
-	```sh
-	git commit -m 'feat: agrega nueva funcionalidad'
-	```
+   ```bash
+   git commit -m "feat: agrega nueva funcionalidad"
+   ```
 5. Abre un Pull Request con una descripción clara de los cambios.
