@@ -5,6 +5,8 @@ import * as TanstackQuery from '@/modules/integrations/tanstack-query/root-provi
 import { routeTree } from './routeTree.gen'
 import { type QueryClient } from '@tanstack/react-query'
 import { type SessionData } from '@/modules/auth/session'
+import { NotFound } from '@/modules/core/components/not-found'
+import { ErrorGloabal } from '@/modules/core/components/error-global'
 
 export type RouterContext = {
   queryClient: QueryClient
@@ -21,6 +23,8 @@ export const getRouter = () => {
       session: undefined!,
     },
     defaultPreload: 'intent',
+    defaultErrorComponent: ErrorGloabal,
+    defaultNotFoundComponent: () => <NotFound />,
     Wrap: (props: { children: React.ReactNode }) => {
       return (
         <TanstackQuery.Provider {...rqContext}>
