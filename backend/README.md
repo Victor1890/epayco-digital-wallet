@@ -13,6 +13,7 @@ Backend de la billetera digital Epayco. Proporciona una API RESTful para la gest
   - [Desarrollo Local](#desarrollo-local)
   - [Producción](#producción)
   - [Migraciones y Seeds](#migraciones-y-seeds)
+  - [Cómo Ejecutar el Proyecto con Docker](#cómo-ejecutar-el-proyecto-con-docker)
 - [Variables de Entorno](#variables-de-entorno)
 - [Resumen de Carpetas](#resumen-de-carpetas)
 - [Principales Dependencias](#principales-dependencias)
@@ -73,6 +74,61 @@ Backend de la billetera digital Epayco. Proporciona una API RESTful para la gest
   ```sh
   pnpm seed:run
   ```
+
+## Cómo Ejecutar el Proyecto con Docker
+
+### Dependencias Requeridas
+- **Docker**: Asegúrate de tener Docker instalado en tu sistema. Descárgalo desde [Docker](https://www.docker.com/).
+
+### Pasos para Levantar el Proyecto
+1. Asegúrate de que los puertos necesarios (por defecto: `4000` para el backend y `3306` para MySQL) estén disponibles en tu máquina.
+2. Copia el archivo de variables de entorno:
+   ```sh
+   cp .env.example .env
+   ```
+3. Configura las variables de entorno críticas en `.env` (ver sección [Variables de Entorno](#variables-de-entorno)).
+4. Construye la imagen de Docker para el backend:
+   ```sh
+   docker build -t epayco-backend .
+   ```
+5. Levanta un contenedor para la base de datos MySQL:
+   ```sh
+   docker run -d \
+     --name epayco-mysql \
+     -e MYSQL_ROOT_PASSWORD=root \
+     -e MYSQL_DATABASE=epayco_db \
+     -p 3306:3306 \
+     mysql:8.0
+   ```
+6. Levanta un contenedor para el backend:
+   ```sh
+   docker run -d \
+     --name epayco-backend \
+     --env-file .env \
+     -p 4000:4000 \
+     epayco-backend
+   ```
+7. Accede al backend en: [http://localhost:4000](http://localhost:4000).
+
+### Comandos Útiles
+- Detener un contenedor:
+  ```sh
+  docker stop <container_name>
+  ```
+- Ver logs de un contenedor:
+  ```sh
+  docker logs -f <container_name>
+  ```
+- Eliminar un contenedor:
+  ```sh
+  docker rm <container_name>
+  ```
+
+### Notas Adicionales
+- Si necesitas cambiar los puertos o configuraciones, edita el archivo `.env` o los comandos de Docker.
+- Asegúrate de que Docker esté corriendo antes de ejecutar los comandos.
+
+---
 
 ## Variables de Entorno
 Ejemplo de `.env`:
