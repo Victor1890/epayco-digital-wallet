@@ -72,7 +72,7 @@ Para más detalles, consulta el archivo [frontend/README.md](./frontend/README.m
 ### Pasos para Levantar el Proyecto
 1. Clona el repositorio:
    ```bash
-   git clone <REPO_URL>
+   git clone https://github.com/Victor1890/epayco-digital-walle
    cd epayco-digital-wallet
    ```
 2. Copia el archivo de variables de entorno para el backend y el frontend:
@@ -142,5 +142,3 @@ Para más detalles, consulta el archivo [frontend/README.md](./frontend/README.m
 
 - **¿Cómo puedo cambiar los puertos por defecto?**
   - Edita las variables `PORT` en los archivos `.env` de `backend` y `frontend`.
-
-Si tienes más preguntas, abre un issue en el repositorio.
