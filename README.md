@@ -18,6 +18,7 @@ Epayco Digital Wallet es una solución integral para la gestión de billeteras d
 - [Cómo Ejecutar el Proyecto con Docker Compose](#cómo-ejecutar-el-proyecto-con-docker-compose)
 - [Notas Adicionales](#notas-adicionales)
 - [Contribuyendo](#contribuyendo)
+- [Testing API Endpoints](#testing-api-endpoints)
 - [FAQ y Solución de Problemas](#faq-y-solución-de-problemas)
 
 ---
@@ -129,6 +130,42 @@ Para más detalles, consulta el archivo [frontend/README.md](./frontend/README.m
    git commit -m "feat: agrega nueva funcionalidad"
    ```
 5. Abre un Pull Request con una descripción clara de los cambios.
+
+---
+
+## Pruebas de los Endpoints de la API
+
+Para probar los endpoints de la API, puedes utilizar la colección de Postman proporcionada. Sigue los pasos a continuación para importar y configurar la colección:
+
+1. **Importar la Colección de Postman**:
+   - Abre Postman.
+   - Haz clic en "Importar" en la esquina superior izquierda.
+   - Selecciona el archivo `Epayco.postman_collection.json` ubicado en la raíz de este repositorio.
+
+2. **Configurar la Variable `BASE_URL`**:
+   - Después de importar la colección, navega a la pestaña "Variables" en Postman.
+   - Configura la variable `BASE_URL` con la URL base de tu API (por ejemplo, `http://localhost:3000` si se ejecuta localmente).
+
+3. **Endpoints Disponibles**:
+   La colección incluye los siguientes endpoints:
+
+   - **Registro Cliente**: `POST {{BASE_URL}}/registroCliente`
+     - Registra un nuevo cliente.
+   - **Recargar Billetera**: `POST {{BASE_URL}}/recargarBilletera`
+     - Agrega fondos a una billetera.
+   - **Solicitar Pago**: `POST {{BASE_URL}}/solicitarPago`
+     - Solicita un pago.
+   - **Confirmar Pago**: `POST {{BASE_URL}}/confirmarPago`
+     - Confirma un pago.
+   - **Consultar Balance**: `GET {{BASE_URL}}/registroCliente/consultarSaldo`
+     - Recupera el balance de un cliente.
+
+4. **Ejecutar las Solicitudes**:
+   - Selecciona un endpoint de la colección.
+   - Haz clic en "Enviar" para ejecutar la solicitud.
+   - Verifica la respuesta para validación.
+
+Para más detalles, consulta la [documentación de Postman](https://learning.postman.com/docs/getting-started/introduction/).
 
 ---
 
