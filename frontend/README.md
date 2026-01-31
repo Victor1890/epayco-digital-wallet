@@ -12,6 +12,7 @@ Frontend de la billetera digital Epayco. Permite a los usuarios registrarse, ini
 - [Cómo Ejecutar el Proyecto](#cómo-ejecutar-el-proyecto)
   - [Desarrollo Local](#desarrollo-local)
   - [Producción](#producción)
+  - [Cómo Ejecutar el Proyecto con Docker](#cómo-ejecutar-el-proyecto-con-docker)
 - [Variables de Entorno](#variables-de-entorno)
 - [Resumen de Carpetas](#resumen-de-carpetas)
 - [Principales Dependencias](#principales-dependencias)
@@ -57,6 +58,52 @@ Frontend de la billetera digital Epayco. Permite a los usuarios registrarse, ini
 	```sh
 	pnpm preview
 	```
+
+## Cómo Ejecutar el Proyecto con Docker
+
+### Dependencias Requeridas
+- **Docker**: Asegúrate de tener Docker instalado en tu sistema. Descárgalo desde [Docker](https://www.docker.com/).
+
+### Pasos para Levantar el Proyecto
+1. Asegúrate de que los puertos necesarios (por defecto: `3000` para el frontend) estén disponibles en tu máquina.
+2. Copia el archivo de variables de entorno:
+   ```sh
+   cp .env.example .env
+   ```
+3. Configura las variables de entorno críticas en `.env` (ver sección [Variables de Entorno](#variables-de-entorno)).
+4. Construye la imagen de Docker para el frontend:
+   ```sh
+   docker build -t epayco-frontend .
+   ```
+5. Levanta un contenedor para el frontend:
+   ```sh
+   docker run -d \
+     --name epayco-frontend \
+     --env-file .env \
+     -p 3000:3000 \
+     epayco-frontend
+   ```
+6. Accede al frontend en: [http://localhost:3000](http://localhost:3000).
+
+### Comandos Útiles
+- Detener un contenedor:
+  ```sh
+  docker stop <container_name>
+  ```
+- Ver logs de un contenedor:
+  ```sh
+  docker logs -f <container_name>
+  ```
+- Eliminar un contenedor:
+  ```sh
+  docker rm <container_name>
+  ```
+
+### Notas Adicionales
+- Si necesitas cambiar los puertos o configuraciones, edita el archivo `.env` o los comandos de Docker.
+- Asegúrate de que Docker esté corriendo antes de ejecutar los comandos.
+
+---
 
 ## Variables de Entorno
 Ejemplo de `.env`:
