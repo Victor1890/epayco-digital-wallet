@@ -140,7 +140,7 @@ Para probar los endpoints de la API, puedes utilizar la colección de Postman pr
 1. **Importar la Colección de Postman**:
    - Abre Postman.
    - Haz clic en "Importar" en la esquina superior izquierda.
-   - Selecciona el archivo `Epayco.postman_collection.json` ubicado en la raíz de este repositorio.
+   - Selecciona el archivo [Epayco.postman_collection.json](/Epayco.postman_collection.json) ubicado en la raíz de este repositorio.
 
 2. **Configurar la Variable `BASE_URL`**:
    - Después de importar la colección, navega a la pestaña "Variables" en Postman.
