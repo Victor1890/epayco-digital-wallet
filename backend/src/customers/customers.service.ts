@@ -24,4 +24,10 @@ export class CustomersService {
         const customer = this.customerRepo.create(payload);
         return this.customerRepo.save(customer);
     }
+
+    findByDocumentoAndCelular(documento: string, celular: string): Promise<CustomerEntity | null> {
+        return this.customerRepo.findOne({
+            where: { documento, celular },
+        });
+    }
 }
