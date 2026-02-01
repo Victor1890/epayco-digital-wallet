@@ -3,11 +3,11 @@ import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './shared/dto/create-customer.dto';
 import { ValidatedBody } from '@/shared/decorators/validate-request.decorator';
 
-@Controller('/')
+@Controller('registroCliente')
 export class CustomersController {
     constructor(private readonly customersService: CustomersService) { }
 
-    @Post('registroCliente')
+    @Post()
     @HttpCode(HttpStatus.CREATED)
     async register(
         @ValidatedBody(CreateCustomerDto.validateSchema) dto: CreateCustomerDto,
