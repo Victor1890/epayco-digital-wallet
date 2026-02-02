@@ -19,6 +19,8 @@ export class WalletsController {
 
         const balance = await this.walletsService.getBalanceByCustomerId(customer.id);
 
-        return { saldo: balance ?? 0 };
+        console.log("Balance consulted: ", balance);
+
+        return { saldo: Number(balance ?? 0) };
     }
 }

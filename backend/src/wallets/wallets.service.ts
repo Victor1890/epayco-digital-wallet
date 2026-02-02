@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WalletEntity } from './model/wallet.entity';
+import { type CustomerEntity } from '@/customers/model/customer.entity';
 
 @Injectable()
 export class WalletsService {
@@ -20,8 +21,8 @@ export class WalletsService {
         return wallet.balance;
     }
 
-    async createWalletForCustomer(customer: any): Promise<WalletEntity> {
-        const wallet = this.walletRepo.create({ customer, balance: 0 });
+    async createWalletForCustomer(customer: CustomerEntity): Promise<WalletEntity> {
+        const wallet = this.walletRepo.create({ customerId: customer.id, balance: 0 });
         return this.walletRepo.save(wallet);
     }
 }

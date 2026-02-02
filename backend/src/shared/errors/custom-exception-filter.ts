@@ -1,6 +1,9 @@
-import { ArgumentsHost, Catch, HttpException, HttpStatus, Logger } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { ArgumentsHost, Catch, Logger } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Response } from 'express';
+import { QueryFailedError } from 'typeorm';
+import { BaseError } from './base-error.abstract';
 
 /**
  * Custom exception filter class that extends the BaseExceptionFilter.
@@ -19,20 +22,52 @@ export class CustomExceptionFilter extends BaseExceptionFilter {
      */
     catch(exception: unknown, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
-        const response = ctx.getResponse<Response>();
-        const request = ctx.getRequest<Request>();
+        const response: Response = ctx.getResponse();
 
-        const status =
-            exception instanceof HttpException
-                ? exception.getStatus()
-                : HttpStatus.INTERNAL_SERVER_ERROR;
+        if (exception instanceof BaseError) {
+            this.handleBaseErrorException(exception, response);
+        } else if (exception instanceof QueryFailedError) {
+            this.handleTypeOrmException(exception, response);
+        } else {
+            super.catch(exception, host);
+        }
+    }
 
-        const message =
-            exception instanceof HttpException
-                ? (exception.getResponse() as any).message || exception.message
-                : 'Internal server error';
+    handleBaseErrorException(exception: BaseError, response: Response) {
+        this.logger.error(exception);
 
-        const customErrorResponse = {
+        const { code, message } = exception;
+
+        const error = {
+            message,
+            details: {
+                statusCode: code,
+                type: exception instanceof Error ? exception.name : 'UnknownException',
+                timestamp: new Date().toISOString(),
+            }
+        };
+
+        response.status(code).json({ error });
+    }
+
+    handleTypeOrmException(exception: QueryFailedError, response: Response) {
+        this.logger.error(exception.message, exception.stack);
+
+        let status = 500;
+        let message = 'Internal server error';
+
+        if (exception.message.includes('invalid input syntax for type uuid')) {
+            status = 400;
+            message = 'Invalid UUID';
+        } else if ((exception as any).code === '23505') {
+            status = 409;
+            message = 'Duplicate key value violates unique constraint';
+        } else if ((exception as any).code === '23503') {
+            status = 400;
+            message = 'Insert or update violates foreign key constraint';
+        }
+
+        const error = {
             message,
             details: {
                 statusCode: status,
@@ -41,6 +76,6 @@ export class CustomExceptionFilter extends BaseExceptionFilter {
             }
         };
 
-        response.status(status).json({ error: customErrorResponse });
+        response.status(status).json({ error });
     }
 }

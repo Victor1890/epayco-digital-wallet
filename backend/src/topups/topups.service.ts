@@ -35,7 +35,7 @@ export class TopupsService {
 
             await manager.save(wallet);
 
-            return { balance: wallet.balance };
+            return { balance: Number(wallet.balance) };
         });
     }
 }

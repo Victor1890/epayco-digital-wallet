@@ -16,12 +16,13 @@ export class PaymentSessionEntity extends BaseEntity {
     @Column({ default: false })
     confirmed: boolean;
 
-    @OneToOne(() => PaymentEntity, payment => payment.session)
-    payment: PaymentEntity;
-
     @CreateDateColumn()
     createdAt: Date;
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @OneToOne(() => PaymentEntity, payment => payment.session)
+    payment: PaymentEntity;
+
 }
