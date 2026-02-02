@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, Generated } from 'typeorm';
 import { PaymentEntity } from '../../payments/model/payment.entity';
 import { BaseEntity } from '@/shared/classes/base.entity';
 
@@ -6,6 +6,14 @@ import { BaseEntity } from '@/shared/classes/base.entity';
 export class PaymentSessionEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Generated('uuid')
+    @Column({
+        type: 'char',
+        length: 36,
+        default: () => 'UUID()',
+    })
+    uuid: string;
 
     @Column()
     otp: string;

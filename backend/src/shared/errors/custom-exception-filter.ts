@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { ArgumentsHost, Catch, Logger } from '@nestjs/common';
+import { ArgumentsHost, Catch, HttpException, Logger, NotFoundException } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Response } from 'express';
 import { QueryFailedError } from 'typeorm';
@@ -28,19 +28,24 @@ export class CustomExceptionFilter extends BaseExceptionFilter {
             this.handleBaseErrorException(exception, response);
         } else if (exception instanceof QueryFailedError) {
             this.handleTypeOrmException(exception, response);
+        } else if (exception instanceof HttpException) {
+            this.handleHttpException(exception, response);
         } else {
+            console.log('Unhandled exception:', exception);
             super.catch(exception, host);
         }
     }
 
-    handleBaseErrorException(exception: BaseError, response: Response) {
+    private handleBaseErrorException(exception: BaseError, response: Response) {
         this.logger.error(exception);
 
-        const { code, message } = exception;
+        const { code, message, errors } = exception;
+
+        console.log("errors: ", errors)
 
         const error = {
             message,
-            details: {
+            details: errors || {
                 statusCode: code,
                 type: exception instanceof Error ? exception.name : 'UnknownException',
                 timestamp: new Date().toISOString(),
@@ -50,7 +55,7 @@ export class CustomExceptionFilter extends BaseExceptionFilter {
         response.status(code).json({ error });
     }
 
-    handleTypeOrmException(exception: QueryFailedError, response: Response) {
+    private handleTypeOrmException(exception: QueryFailedError, response: Response) {
         this.logger.error(exception.message, exception.stack);
 
         let status = 500;
@@ -73,6 +78,28 @@ export class CustomExceptionFilter extends BaseExceptionFilter {
                 statusCode: status,
                 type: exception instanceof Error ? exception.name : 'UnknownException',
                 timestamp: new Date().toISOString(),
+            }
+        };
+
+        response.status(status).json({ error });
+    }
+
+    private handleHttpException(exception: HttpException, response: Response) {
+        const status = exception.getStatus();
+        const res: any = exception.getResponse();
+
+        const message =
+            typeof res === 'string'
+                ? res
+                : res?.message || 'Unexpected error';
+
+        const error = {
+            message,
+            details: {
+                statusCode: status,
+                type: exception.name || 'HttpException',
+                timestamp: new Date().toISOString(),
+                errors: res?.errors ?? undefined,
             }
         };
 

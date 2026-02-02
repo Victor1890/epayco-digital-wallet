@@ -40,7 +40,7 @@ export class PaymentsService {
 
         const { session, otp } = await this.paymentSessionsService.createSession(payment);
 
-        return { message: 'Token enviado al email registrado', sessionId: session.id, otp };
+        return { message: 'Token enviado al email registrado', sessionId: session.uuid, otp };
     }
 
     async confirmPayment(payload: ConfirmPaymentDto) {
@@ -49,9 +49,18 @@ export class PaymentsService {
         if (!session) throw new BadRequestException('Sesión o token inválido');
 
         return this.dataSource.transaction(async manager => {
-            const payment = await manager.findOne(PaymentEntity, { where: { session: { id: session.id } } });
-            if (!payment) throw new NotFoundException('Pago no encontrado');
+            const payment = await manager.findOne(PaymentEntity, {
+                where: {
+                    session: {
+                        id: session.id
+                    }
+                },
+                relations: {
+                    wallet: true
+                }
+            });
 
+            if (!payment) throw new NotFoundException('Pago no encontrado');
             if (payment.status === 'confirmed') throw new BadRequestException('Pago ya confirmado');
 
             const wallet = await manager.findOne(WalletEntity, { where: { id: payment.wallet.id } });
@@ -64,7 +73,7 @@ export class PaymentsService {
             await manager.save(wallet);
             await manager.save(payment);
 
-            await this.paymentSessionsService.markSessionConfirmed(session.id, manager);
+            await this.paymentSessionsService.markSessionConfirmed(session, manager);
             return { message: 'Pago confirmado exitosamente', isValid: true };
         });
     }

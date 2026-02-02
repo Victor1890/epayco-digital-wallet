@@ -28,12 +28,12 @@ export class PaymentSessionsService {
     }
 
     async validateSession(sessionId: string, otp: string) {
-        const session = await this.sessionRepo.findOne({ where: { id: Number(sessionId), otp, confirmed: false } });
+        const session = await this.sessionRepo.findOne({ where: { uuid: sessionId, otp, confirmed: false } });
         if (!session || session.expiresAt < new Date()) throw new BadRequestException('Sesión o token inválido/expirado');
         return session;
     }
 
-    async markSessionConfirmed(sessionId: number, manager: EntityManager) {
-        await manager.update(PaymentSessionEntity, { id: sessionId }, { confirmed: true });
+    async markSessionConfirmed(session: PaymentSessionEntity, manager: EntityManager) {
+        await manager.update(PaymentSessionEntity, { uuid: session.uuid }, { confirmed: true });
     }
 }
