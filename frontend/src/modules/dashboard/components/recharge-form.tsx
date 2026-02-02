@@ -38,7 +38,9 @@ export function RechargeForm() {
       valor: Number(valor),
     })
 
-    const isSuccessful = result && result.saldo !== undefined
+    console.log('Recharge result:', result)
+
+    const isSuccessful = result && result.balance !== undefined
 
     if (!isSuccessful) {
       setMessage({
@@ -51,7 +53,7 @@ export function RechargeForm() {
     setData({
       client: {
         ...currentClient,
-        saldo: result.saldo,
+        saldo: result.balance,
       },
       transactions: [
         ...(data.transactions || []),
@@ -67,7 +69,7 @@ export function RechargeForm() {
 
     setMessage({
       type: 'success',
-      text: `Recarga exitosa. Nuevo saldo: $${result.saldo.toLocaleString('es-CO')}`,
+      text: `Recarga exitosa. Nuevo saldo: $${result.balance.toLocaleString('es-CO')}`,
     })
 
     setValor('')

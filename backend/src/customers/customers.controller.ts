@@ -13,6 +13,6 @@ export class CustomersController {
         @ValidatedBody(CreateCustomerDto.validateSchema) dto: CreateCustomerDto,
     ) {
         const customer = await this.customersService.registerCustomer(dto);
-        return customer.toJSON()
+        return { ...customer.toJSON(), saldo: 0 };
     }
 }
