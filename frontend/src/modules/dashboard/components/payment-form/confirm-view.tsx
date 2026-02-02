@@ -13,7 +13,7 @@ import { Fragment } from 'react/jsx-runtime'
 
 interface ConfirmViewProps {
   payload: { valor: string }
-  data: { sessionId: string; token: string }
+  data: { sessionId: string; otp: string }
   isLoading?: boolean
   message?: { type: 'success' | 'error'; text: string } | null
   onSubmit: SubmitEventHandler<HTMLFormElement>
@@ -31,7 +31,7 @@ export function ConfirmView({
   const [isCopied, setCopied] = useState(false)
 
   const handleCopyToken = async () => {
-    await navigator.clipboard.writeText(data.token)
+    await navigator.clipboard.writeText(data.otp)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -61,7 +61,7 @@ export function ConfirmView({
           </p>
           <div className="flex items-center justify-between">
             <code className="text-lg font-mono font-bold text-primary tracking-widest">
-              {data.token}
+              {data.otp}
             </code>
             <Button
               variant="ghost"
@@ -86,7 +86,7 @@ export function ConfirmView({
             <Input
               id="token"
               placeholder="000000"
-              value={data.token}
+              value={data.otp}
               readOnly
               className="text-center text-xl tracking-widest font-mono"
               required
@@ -117,7 +117,7 @@ export function ConfirmView({
             <Button
               type="submit"
               className="flex-1"
-              disabled={isLoading || data.token.length !== 6}
+              disabled={isLoading || data?.otp?.length !== 6}
             >
               {isLoading ? 'Procesando...' : 'Confirmar Pago'}
             </Button>

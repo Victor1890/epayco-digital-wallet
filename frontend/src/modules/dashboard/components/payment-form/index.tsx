@@ -28,7 +28,7 @@ export function PaymentForm() {
   const [step, setStep] = useState<'request' | 'confirm'>('request')
   const [data, setData] = useState({
     sessionId: '',
-    token: '',
+    otp: '',
   })
 
   const requestPaymentMutation = useRequestPayment()
@@ -38,7 +38,7 @@ export function PaymentForm() {
   const handleCancel = () => {
     setStep('request')
     setPayload({ valor: '' })
-    setData({ sessionId: '', token: '' })
+    setData({ sessionId: '', otp: '' })
     setMessage(null)
   }
 
@@ -81,7 +81,7 @@ export function PaymentForm() {
     try {
       const result = await confirmPaymentMutation.mutateAsync({
         sessionId: data.sessionId,
-        token: data.token,
+        token: data.otp,
       })
 
       const isSuccessful = result.isValid

@@ -9,12 +9,31 @@
   "item": [
     {
       "name": "Registro Cliente",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const responseData = pm.response.json();",
+              "",
+              "const { documento, celular } = responseData",
+              "",
+              "pm.globals.set(\"documento\", documento);",
+              "pm.globals.set(\"celular\", celular);",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
       "request": {
         "method": "POST",
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"documento\": \"document-01\",\n    \"nombres\": \"Victor Rosario\",\n    \"email\": \"v@r.com\",\n    \"celular\": \"8095557777\"\n}",
+          "raw": "{\n    \"documento\": \"document-03\",\n    \"nombres\": \"Victor Rosario\",\n    \"email\": \"v@3.com\",\n    \"celular\": \"8095557773\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -40,7 +59,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"documento\": \"document-01\",\n    \"celular\": \"8095557777\",\n    \"valor\": 100\n}",
+          "raw": "{\n    \"documento\": \"{{documento}}\",\n    \"celular\": \"{{celular}}\",\n    \"valor\": 100\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -61,12 +80,31 @@
     },
     {
       "name": "Solicitar Pago",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const responseData = pm.response.json();",
+              "",
+              "const { sessionId, otp } = responseData",
+              "",
+              "pm.globals.set(\"sessionId\", sessionId);",
+              "pm.globals.set(\"otp\", otp);",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
       "request": {
         "method": "POST",
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"documento\": \"document-01\",\n    \"celular\": \"8095557777\",\n    \"valor\": 10\n}",
+          "raw": "{\n    \"documento\": \"{{documento}}\",\n    \"celular\": \"{{celular}}\",\n    \"valor\": 10\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -92,7 +130,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n    \"documento\": \"asd\",\n    \"celular\": \"adasd\",\n    \"valor\": 10\n}",
+          "raw": "{\n    \"sessionId\": \"{{sessionId}}\",\n    \"token\": \"{{otp}}\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -113,29 +151,26 @@
     },
     {
       "name": "Consultar Balance",
-      "protocolProfileBehavior": {
-        "disableBodyPruning": true
-      },
       "request": {
         "method": "GET",
         "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"documento\": \"asd\",\n    \"celular\": \"adasd\",\n    \"valor\": 10\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
         "url": {
-          "raw": "{{BASE_URL}}/registroCliente/consultarSaldo",
+          "raw": "{{BASE_URL}}/consultarSaldo?documento={{documento}}&celular={{celular}}",
           "host": [
             "{{BASE_URL}}"
           ],
           "path": [
-            "registroCliente",
             "consultarSaldo"
+          ],
+          "query": [
+            {
+              "key": "documento",
+              "value": "{{documento}}"
+            },
+            {
+              "key": "celular",
+              "value": "{{celular}}"
+            }
           ]
         }
       },

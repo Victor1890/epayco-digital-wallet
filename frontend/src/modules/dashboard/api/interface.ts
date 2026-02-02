@@ -8,7 +8,7 @@ export interface ReloadBalancePayload extends PayloadBase {
 }
 
 export interface ReloadBalanceResponse {
-    saldo: number;
+    balance: number;
 }
 
 export interface RequestPaymentPayload extends PayloadBase {
@@ -17,7 +17,7 @@ export interface RequestPaymentPayload extends PayloadBase {
 
 export interface RequestPaymentResponse {
     sessionId: string;
-    token: string;
+    otp: string;
 }
 
 export interface ConfirmPaymentPayload {

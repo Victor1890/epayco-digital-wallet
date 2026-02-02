@@ -16,6 +16,7 @@ Backend de la billetera digital Epayco. Proporciona una API RESTful para la gest
   - [Producción](#producción)
   - [Migraciones y Seeds](#migraciones-y-seeds)
   - [Cómo Ejecutar el Proyecto con Docker](#cómo-ejecutar-el-proyecto-con-docker)
+- [Base de Datos](#base-de-datos)
 - [Variables de Entorno](#variables-de-entorno)
 - [Resumen de Carpetas](#resumen-de-carpetas)
 - [Principales Dependencias](#principales-dependencias)
@@ -137,6 +138,11 @@ Backend de la billetera digital Epayco. Proporciona una API RESTful para la gest
 ### Notas Adicionales
 - Si necesitas cambiar los puertos o configuraciones, edita el archivo `.env` o los comandos de Docker.
 - Asegúrate de que Docker esté corriendo antes de ejecutar los comandos.
+
+---
+
+## Base de Datos
+La documentación de base de datos (configuración, entidades, ERD y migraciones) está en: [docs/base-de-datos.md](./docs/base-de-datos.md)
 
 ---
 
