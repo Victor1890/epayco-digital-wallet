@@ -1,8 +1,8 @@
-import { Controller, Post, HttpCode, HttpStatus, Get } from '@nestjs/common';
+import { ValidatedBody } from '@/shared/decorators/validate-request.decorator';
+import { Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
-import { RequestPaymentDto } from './shared/dto/request-payment.dto';
 import { ConfirmPaymentDto } from './shared/dto/confirm-payment.dto';
-import { ValidatedBody, ValidatedQueryParams } from '@/shared/decorators/validate-request.decorator';
+import { RequestPaymentDto } from './shared/dto/request-payment.dto';
 
 @Controller('/')
 export class PaymentsController {
@@ -14,9 +14,9 @@ export class PaymentsController {
         return this.paymentsService.requestPayment(dto);
     }
 
-    @Get('confirmarPago')
+    @Post('confirmarPago')
     @HttpCode(HttpStatus.OK)
-    async confirmPayment(@ValidatedQueryParams(ConfirmPaymentDto.validateSchema) dto: ConfirmPaymentDto) {
+    async confirmPayment(@ValidatedBody(ConfirmPaymentDto.validateSchema) dto: ConfirmPaymentDto) {
         return this.paymentsService.confirmPayment(dto);
     }
 }
